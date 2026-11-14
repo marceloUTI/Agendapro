@@ -1,0 +1,6 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#2563eb"><title>{% block title %}AgendaPro{% endblock %} | AgendaPro</title><link rel="stylesheet" href="{{ url_for('static',filename='style.css') }}"><script src="{{ url_for('static',filename='app.js') }}" defer></script></head><body>
+<div class="shell"><header class="top"><div class="top-inner"><a class="brand" href="{{ url_for('dashboard') }}">AgendaPro</a><span class="tagline">Sua rotina organizada, seu negócio em dia.</span><button class="menu-toggle" aria-label="Abrir menu" aria-expanded="false" onclick="toggleMenu()">☰</button></div></header>
+<div class="desktop-layout"><aside class="side-nav"><div class="side-brand">✚ AgendaPro</div><nav>{% include 'nav.html' %}</nav><form action="{{ url_for('logout') }}" method="post"><button class="logout">Sair da conta</button></form></aside><main class="main">
+{% with msgs=get_flashed_messages(with_categories=true) %}{% for category,message in msgs %}<div class="flash {{ category }}">{{ message }}</div>{% endfor %}{% endwith %}
+{% block content %}{% endblock %}</main></div>
+<nav class="bottom-nav" aria-label="Navegação principal">{% include 'nav.html' %}</nav></div></body></html>
