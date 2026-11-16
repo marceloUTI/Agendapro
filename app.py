@@ -21,11 +21,23 @@ app.config.update(SESSION_COOKIE_HTTPONLY=True, SESSION_COOKIE_SAMESITE='Lax')
 
 
 def connection():
-    return pymysql.connect(host=os.getenv('MYSQL_HOST', 'localhost'),
-        port=int(os.getenv('MYSQL_PORT', '3306')), user=os.getenv('MYSQL_USER', 'root'),
-        password=os.getenv('MYSQL_PASSWORD', ''), database=os.getenv('MYSQL_DATABASE', 'agendapro'),
-        charset='utf8mb4', cursorclass=DictCursor, autocommit=False)
+    config = {
+        'host': os.getenv('MYSQL_HOST', 'localhost'),
+        'port': int(os.getenv('MYSQL_PORT', '3306')),
+        'user': os.getenv('MYSQL_USER', 'root'),
+        'password': os.getenv('MYSQL_PASSWORD', ''),
+        'database': os.getenv('MYSQL_DATABASE', 'agendapro'),
+        'charset': 'utf8mb4',
+        'cursorclass': DictCursor,
+        'autocommit': False
+    }
 
+    if os.getenv('MYSQL_SSL', 'false').lower() == 'true':
+        config['ssl_ca'] = os.getenv('MYSQL_SSL_CA', 'ca.pem')
+        config['ssl_verify_cert'] = True
+        config['ssl_verify_identity'] = True
+
+    return pymysql.connect(**config)
 
 def query(sql, args=(), one=False):
     with connection() as db:
